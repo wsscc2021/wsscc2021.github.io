@@ -634,6 +634,7 @@ $sidebar-display: "sidebar-display";
   width: $sidebar-width;
   z-index: 99;
   background: var(--sidebar-bg);
+  border-right: solid 1px var(--main-border-color);
 
   /* Hide scrollbar for Chrome, Safari and Opera */
   &::-webkit-scrollbar {
@@ -650,7 +651,7 @@ $sidebar-display: "sidebar-display";
     &:hover {
       @include no-text-decoration;
 
-      color: #fff;
+      color: #424242;
     }
   }
 
@@ -721,12 +722,14 @@ $sidebar-display: "sidebar-display";
     height: $tab-height;
     &:hover {
       .nav-link {
-        color: #f8f9facf;
+        color: #424242;
+        font-weight: bold;
       }
     }
     &.active {
       .nav-link {
-        color: #fcfcfc;
+        color: #424242;
+        font-weight: bold;
       }
     }
   }
@@ -832,7 +835,7 @@ $sidebar-display: "sidebar-display";
 
     a:hover,
     #mode-toggle-wrapper i:hover {
-      color: #fff;
+      color: #424242;
     }
 
   } // .sidebar-bottom
