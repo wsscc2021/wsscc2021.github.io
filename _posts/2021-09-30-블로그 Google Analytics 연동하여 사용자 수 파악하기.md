@@ -50,6 +50,13 @@ google_analytics:
     cache_path:       # the local PV cache data, friendly to visitors from GFW region
 ```
 
+
+## Google Analytics Developer Page
+
+만약 테마에 기능이 구현되어 있지 않다면 Google Analytics의 Developer 페이지를 참조하면 좋을 것 같습니다.
+
+- [https://developers.google.com/analytics/devguides/collection/gtagjs](https://developers.google.com/analytics/devguides/collection/gtagjs)
+
 ## 동작 확인
 
 변경한 내용을 반영한 뒤 블로그에 접근해보면, Google Analytics에 사용자 수가 집계되는 것을 볼 수 있습니다.
