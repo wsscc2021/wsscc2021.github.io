@@ -43,7 +43,7 @@ print(tesla.__dict__)
 {'code': 'xxxxxxxxxx'}
 ```
 
-이럴 때 Name Mangling을 활용하면 오버라이딩을 막을 수 있습니다.
+이럴 때 Name Mangling을 활용하면 파이썬 컴파일러가 `_클래스명__변수명`으로 변수명을 변경시킵니다. 결과적으로 같은 이름의 `__code` 변수명을 사용했음에도 오버라이딩 되지 않습니다.
 
 ```python
 class Car:
