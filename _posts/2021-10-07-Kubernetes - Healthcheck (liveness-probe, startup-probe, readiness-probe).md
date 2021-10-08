@@ -70,9 +70,9 @@ startupProbe:
 
 ## readiness probe
 
-어플리케이션이 시작되어 요청을 처리할 수 있는 상태이지만, 대용량 데이터이나 구성파일을 로드하는 것을 기다리고 싶을 때 사용됩니다. 이 시기에는 파드를 재시작하고 싶지는 않고 **파드로 들어오는 요청을 받지 않고 싶습니다**.
+파드에 트래픽이 몰려 cpu/memory 사용률이 일정 수준 이상 높아지면 요청을 처리하는 것에 지연이 생기거나 500에러가 발생하여 Healthcheck에 실패할 수 있습니다. 이는 어플리케이션의 에러가 아니며 cpu/memory 사용률을 낮춰주면 자연스럽게 해결되는 문제입니다. 이럴 경우 readiness probe을 활용하여 트래픽을 받지 않음으로써 cpu/memory 사용률을 낮춰주는 역할을 수행할 수 있습니다.
 
-`readiness probe`에 실패한 파드는 요청을 받지 않습니다.
+`readiness probe`에 실패한 파드는 **요청을 받지 않습니다.**
 
 ```
 readinessProbe:
@@ -88,7 +88,7 @@ readinessProbe:
 
 
 
-readiness probe의 동작을 정확하게 이해하기 위해서는 서비스, 엔드포인트, 파드 리소스의 네트워크 연결이 어떻게 이뤄지는 지 이해해야 합니다.
+`readiness probe`의 동작을 정확하게 이해하기 위해서는 서비스, 엔드포인트, 파드 리소스의 네트워크 연결이 어떻게 이뤄지는 지 이해해야 합니다.
 
 ![readinessprobe.png](/assets/img/posts/2021-10-07-Kubernetes - Healthcheck (liveness-probe, startup-probe, readiness-probe)/readinessprobe.png)
 
@@ -115,9 +115,13 @@ kubectl describe endpoints <service-name>
 ```
 
 
+만약 liveness probe로 파드가 재시작되기 전에 트래픽을 완화하기 위한 용도로 readiness probe를 사용한다면 아래를 주의해야 하여 설정하는 것이 좋습니다.
+
+- readiness probe는 liveness probe와 다른 엔드포인트로 healthcheck를 진행합니다.
+- readiness probe는 liveness probe보다 먼저 동작해야합니다.  
+
 
 ## 결론
 
-`liveness probe`와 `startup probe`는 파드의 self-healing을 위해서 반드시 사용되어야한다고 생각하며, `readiness probe`는 서비스와 영향을 주는 제 3의 서비스의 상태를 확인하기 위해서 사용될 수 있을 것 같습니다.
-
-> 예를 들어, 만약 **"주문 서비스"를 파드로 실행하고 있을 때** "제품 서비스"에서 에러가 발생한다면 주문 기능을 정상적으로 수행할 수 없을 것 입니다. 하지만 주문 서비스에는 아무런 문제가 없으므로 파드를 재시작할 필요가 없습니다. 이럴 경우 readiness probe를 통해  주문 서비스는 실행되고 있는 상태로 요청만 받지 않도록 구성할 수 있습니다.
+`liveness probe`와 `startup probe`는 파드의 self-healing을 위해서 반드시 사용되어야 하지만 정확하게 이해하지 못한다면 pod가 무분별하게 재시작되어 시스템에 악영향을 줄 수 있기 때문에 조심해야 합니다.
+`readiness probe`는 어플리케이션 시작 후 liveness probe의 무분별한 파드 재시작을 억제하기 위해서 사용될 수 있을 것입니다. 이를 위해서 liveness probe와 다른 엔드포인트로 healthcheck를 진행하며 liveness probe보다 먼저 동작하도록 설정해야 합니다.
